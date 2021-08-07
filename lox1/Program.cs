@@ -63,12 +63,12 @@ namespace lox1
 			}
 		}
 
-		public static void error(int line, string message)
+		public static void Error(int line, string message)
 		{
 			report(line, "", message);
 		}
 
-		private static void report(int line, string where, string message)
+		private static void Report(int line, string where, string message)
 		{
 			Console.WriteLine("[line " + line + "] Error" + where + ": " + message);
 			HadError = true;
