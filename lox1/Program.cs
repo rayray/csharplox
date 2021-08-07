@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Text;
+using System.Collections.Generic;
 
 namespace lox1
 {
 	class Program
 	{
+		static bool HadError = false;
 		static void Main(string[] args)
 		{
 			if (args.Length > 1)
@@ -28,10 +29,16 @@ namespace lox1
 			if (!File.Exists(path))
 			{
 				Console.WriteLine("file does not exist");
+				return;
 			}
 
 			string source = File.ReadAllText(path);
 			Run(source);
+
+			if (HadError)
+			{
+				// what's the windows way to indicate error on terminate?
+			}
 		}
 
 		private static void RunPrompt()
@@ -47,7 +54,24 @@ namespace lox1
 
 		private static void Run(string source)
 		{
-			Console.WriteLine(source);
+			Scanner scanner = new Scanner(source);
+			List<Token> tokens = scanner.ScanTokens();
+
+			foreach (Token token in tokens)
+			{
+				Console.WriteLine(token);
+			}
+		}
+
+		public static void error(int line, string message)
+		{
+			report(line, "", message);
+		}
+
+		private static void report(int line, string where, string message)
+		{
+			Console.WriteLine("[line " + line + "] Error" + where + ": " + message);
+			HadError = true;
 		}
 	}
 }
